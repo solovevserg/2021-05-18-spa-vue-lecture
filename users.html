@@ -34,11 +34,22 @@
 
         Vue.component('user-card', {
             template: `
-<div style="background: wheat; margin: 10px">
-    <img v-bind:src="user.img">
+<div style="background: wheat; margin: 10px; display: flex">
+    <img v-bind:src="imgSrc">
+    <p style="margin-left: 10px;"> 
     {{user.firstName}}
+    </p>
 </div>`,
             props: ['user'],
+            computed: {
+                
+                imgSrc: function() {
+                    // Мы добавляем имя пользователя в query params,
+                    //чтобы сделать каждый запрос уникальным,
+                    // чтобы сервис генерации рандомных картинок возвращал разные картинки для разных пользователей
+                    return `${this.user.img}?randomToken="${this.user.firstName + this.user.lastName}"`; 
+                }
+            }
         })
 
         const app = new Vue({
@@ -49,8 +60,8 @@
             },
             computed: {
                 filteredUsers: function () {
-                    if(!query) {
-                        return users;
+                    if(!this.query) {
+                        return this.users;
                     }
                     const query = this.query.toLowerCase();
                     const predicate = getPredicate(query);
