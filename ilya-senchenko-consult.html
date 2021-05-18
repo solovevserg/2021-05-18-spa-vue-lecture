@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <header class="nav-bar">
+        <menu class="nav-bar__menu">
+            <li>First</li>
+            <li>Second</li>
+            <li>Third</li>
+            <li>Forth</li>
+        </menu>
+    </header>
+
+    <section class="welcome">
+        <div class="container">
+            <h2>Features</h2>
+        </div>
+    </section>
+
+    <section class="rules">
+        <div class="rules__heasder-wrapper">
+            <h2 class="header">Rules</h2>
+        </div>
+    </section>
+
+    <style>
+        :root {
+            --color-bg: #b25cb4;
+        }
+        body {
+            margin: 0;
+        }
+        .nav-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: #5555;
+            transition: .3s ease-in;
+        }
+        .nav-bar.hidden {
+            transform: translateY(-110%);
+            transition-timing-function: ease-out;
+        }
+
+        .nav-bar__menu {
+            list-style: none;
+            margin: 0;
+            display: flex;
+        }
+        .nav-bar__menu li {
+            margin-right: 10px;
+        }
+
+        section{
+            min-height: 100vh
+        }
+
+        .welcome {
+            display: flex;
+            background: var(--color-bg);
+        }
+
+        .rules__heasder-wrapper {
+            background: var(--color-bg);
+            display: flex;
+        }
+    </style>
+
+    <script>
+        function main() {
+            let prev = 0;
+            window.addEventListener('scroll', event => {
+                const scrollTop = document.querySelector('html').scrollTop;
+                const delta = scrollTop - prev;
+                shouldShow = scrollTop < 25 || delta < 0;
+                
+                document.querySelector('.nav-bar').classList.toggle('hidden', !shouldShow);
+
+                prev = scrollTop;
+            }); 
+        }
+
+        main();
+    </script>
+</body>
+
+</html>

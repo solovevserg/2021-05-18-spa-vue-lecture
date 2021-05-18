@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <div id="app">
+        <input type="search" v-model="query"><br>
+        <span v-if="query">
+            Найдено пользователей: {{filteredUsers.length}}
+        </span>
+        <span v-if="!query">
+            Всего пользователей: {{users.length}}
+        </span>
+        <user-card v-for="user of filteredUsers" v-bind:user="user"></user-card>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script>
+
+        function getPredicate(query) {
+            return user => {
+                const fullName = `${user.firstName} ${user.lastName}`;
+                return fullName.toLocaleLowerCase().includes(query);
+            };
+        }
+
+        Vue.component('user-card', {
+            template: `
+<div style="background: wheat; margin: 10px">
+    <img v-bind:src="user.img">
+    {{user.firstName}}
+</div>`,
+            props: ['user'],
+        })
+
+        const app = new Vue({
+            el: '#app',
+            data: {
+                users: [],
+                query: '',
+            },
+            computed: {
+                filteredUsers: function () {
+                    if(!query) {
+                        return users;
+                    }
+                    const query = this.query.toLowerCase();
+                    const predicate = getPredicate(query);
+                    const filtered = this.users.filter(predicate);
+                    return filtered;
+                }
+            },
+            created: async function () {
+                this.users = await fetch('http://195.19.40.218:1313/users', {
+                    mode: 'cors',
+                    headers: {
+                        auth: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6InN0cmluZyIsInBhc3N3b3JkIjoic3RyaW5nIiwiaWQiOiI2Y2Q1NWRlYy0xNTZkLTRkNjAtYjcwMy1kNzFkYTg5MTgxOWYiLCJpYXQiOjE2MjEzMTkwMjh9.YVHO3nVXgpEbR693epREm3dhgXSLfiQMFUS7D_hQs1o'
+                    }
+                }).then(response => response.json());
+                // document.body.style.background = 'red';
+            }
+        })
+
+    </script>
+
+</body>
+
+</html>
