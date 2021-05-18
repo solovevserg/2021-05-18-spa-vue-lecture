@@ -34,10 +34,11 @@
 
         Vue.component('user-card', {
             template: `
-<div style="background: wheat; margin: 10px; display: flex">
+<div style="background: wheat; margin: 10px 0; display: flex">
     <img v-bind:src="imgSrc">
     <p style="margin-left: 10px;"> 
     {{user.firstName}}
+    {{user.lastName}}
     </p>
 </div>`,
             props: ['user'],
